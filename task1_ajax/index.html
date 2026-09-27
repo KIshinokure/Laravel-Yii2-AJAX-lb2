@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Проверка логина (AJAX)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-group { margin-bottom: 15px; }
+        #status { font-weight: bold; margin-left: 10px; }
+        .available { color: green; }
+        .exists { color: red; }
+    </style>
+</head>
+<body>
+    <h2>Регистрация пользователя</h2>
+    <div class="form-group">
+        <label for="username">Логин:</label>
+        <input type="text" id="username" placeholder="Введите логин...">
+        <span id="status"></span>
+    </div>
+    <script>
+        const usernameInput = document.getElementById('username');
+        const statusSpan = document.getElementById('status');
+
+        usernameInput.addEventListener('input', function() {
+            const username = this.value.trim();
+            if (username === '') { statusSpan.textContent = ''; return; }
+
+            fetch(`check_username.php?username=${encodeURIComponent(username)}`)
+                .then(response => response.json())
+                .then(data => {
+                    statusSpan.textContent = data.message;
+                    statusSpan.className = data.status;
+                });
+        });
+    </script>
+</body>
+</html>
